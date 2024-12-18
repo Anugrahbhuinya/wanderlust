@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Wanderlust</title>
 </head>
 <body>
-    <h3>Edit yourListings</h3>
-    <form >
+    <h3>Edit Listings</h3>
+    <form method="POST" action="/listings/<%=listing._id%>?_method="PUT">
         <input name="listing[title]" value="<%=listing.title%>" type="text">
         <br/><br/>
         <textarea name="listing[description]" value="<%=listing.description%>" type="text"></textarea><br/><br/>
