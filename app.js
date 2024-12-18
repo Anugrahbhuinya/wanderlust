@@ -52,6 +52,12 @@ app.post("/listings",async(req,res)=>{
     res.redirect("/listings")
 
 })
+//Edit Route
+app.get("/listings/:id/edit",async(req,res)=>{
+    let {id} = req.params;
+    const listing = await Listing.findById(id);
+    res.render("listings/edit.ejs",{listing});
+})
 
 app.listen(8080, ()=>{
     console.log("server started");
