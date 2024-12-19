@@ -76,3 +76,11 @@ body{
 .add-btn{
     border: none !important;
 }
+/* buttons in show*/
+.btns{
+    display: flex;
+    border: none !important;
+}
+.show-img{
+    height: 30vh;
+}
