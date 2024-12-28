@@ -11,6 +11,10 @@ const {listingSchema, reviewSchema} = require("./schema.js");
 const Review= require("./models/review.js");
 const listings = require("./routes/lisitng.js");
 const reviews = require("./routes/review.js");
+const { Session } = require("inspector/promises");
+const session = require("express-session");
+const flash =  require("connect-flash");
+
 
 
 app.set("view engine","ejs");
@@ -25,9 +29,30 @@ main().then((res)=>{console.log("result")}).catch((err)=>{console.log("error")})
 async function main() {
   await mongoose.connect(MONGO_URL);
 }
+
+const sessionOptions ={
+    secret : "mysecretcode",
+    resave : false,
+    saveUninitialized: true,
+    cookie:{
+        expires :Date.now()+7*24*60*60*1000,
+        maxAge: 7*24*60*60,
+        httpOnly:true
+    },
+};
+
+
 app.get("/",(req,res)=>{
     res.send("root");
 })
+
+app.use(session(sessionOptions));
+app.use(flash());
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+});
 
 app.use("/listings",listings);
 app.use("/listings/:id/reviews",reviews)
