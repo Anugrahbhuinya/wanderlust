@@ -18,6 +18,7 @@ const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const { Session } = require("inspector/promises");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const flash =  require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -32,13 +33,30 @@ app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
 
-const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust'
+ const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust'
+const dbUrl = 'mongodb+srv://anugrahbhuinya007:yrqK5sphDht7GXOe@cluster0.sdlit.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
+
+
+
 main().then((res)=>{console.log("result")}).catch((err)=>{console.log("error")});
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbUrl);
 }
 
+const store = MongoStore.create({
+    mongoUrl :  dbUrl,
+    crypto:{
+        secret:"mysecretcode",
+    },
+    touchAfter:24*3600,
+});
+
+store.on("error",()=>{
+    console.log("ERROR IN MONGODB STORE",err)
+});
+
 const sessionOptions ={
+    store,
     secret : "mysecretcode",
     resave : false,
     saveUninitialized: true,
@@ -53,6 +71,8 @@ const sessionOptions ={
 app.get("/",(req,res)=>{
     res.send("root");
 })
+
+
 
 app.use(session(sessionOptions));
 app.use(flash());

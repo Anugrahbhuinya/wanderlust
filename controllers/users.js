@@ -1,4 +1,7 @@
 
+const User = require('../models/user.js'); // Adjust the path as needed
+
+
 module.exports.renderSignupForm = (req,res)=>{
     res.render("users/signup.ejs");
 }
@@ -14,7 +17,7 @@ module.exports.signup = async(req,res)=>{
             if(err){
                 return next(err);
             }
-            req.flash("success","Welcome to Wanderlust!");
+            req.flash("success",`Welcome to Wanderlust! ${username}`);
             res.redirect("/listings");
         })
 
